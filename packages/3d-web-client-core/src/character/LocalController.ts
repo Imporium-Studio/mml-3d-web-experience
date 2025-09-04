@@ -194,7 +194,8 @@ export class LocalController {
       const targetAnimation = this.getTargetAnimation();
       this.config.character.updateAnimation(targetAnimation);
     } else {
-      this.config.character.updateAnimation(AnimationState.idle);
+      const forced = this.config.character.getForcedAnimation?.();
+      this.config.character.updateAnimation(forced ?? AnimationState.idle);
     }
 
     if (this.controlState) {
@@ -225,6 +226,15 @@ export class LocalController {
   }
 
   private getTargetAnimation(): AnimationState {
+    // // Forced animation (e.g., custom area) takes priority over locomotion states except double jump
+    // const forced = this.config.character.getForcedAnimation?.();
+    // if (forced !== null && forced !== undefined) {
+    //   // Allow double jump to override forced animation mid-air
+    //   if (!this.controlState) {
+    //     return forced;
+    //   }
+    // }
+
     if (!this.config.character) return AnimationState.idle;
 
     const jumpHeight = this.characterVelocity.y > 0 ? 0.2 : 1.8;
@@ -235,7 +245,8 @@ export class LocalController {
       return AnimationState.air;
     }
     if (!this.controlState) {
-      return AnimationState.idle;
+      const forced = this.config.character.getForcedAnimation?.();
+      return forced ?? AnimationState.idle;
     }
 
     if (this.controlState.isSprinting) {

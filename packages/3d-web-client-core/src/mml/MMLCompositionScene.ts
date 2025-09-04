@@ -20,6 +20,7 @@ import {
 } from "@mml-io/mml-web-threejs";
 import { PerspectiveCamera, Scene, WebGLRenderer, AudioListener, Group, Object3D } from "three";
 
+import { CharacterManager, CustomAnimationArea } from "../character/CharacterManager";
 import { CollisionsManager } from "../collisions/CollisionsManager";
 
 type MMLCompositionSceneConfig = {
@@ -29,6 +30,7 @@ type MMLCompositionSceneConfig = {
   camera: PerspectiveCamera;
   audioListener: AudioListener;
   collisionsManager: CollisionsManager;
+  characterManager: CharacterManager;
   getUserPositionAndRotation: () => PositionAndRotation;
 };
 
@@ -107,6 +109,15 @@ export class MMLCompositionScene {
       },
       removeCollider: (object: Object3D) => {
         this.config.collisionsManager.removeMeshesGroup(object as Group);
+      },
+      addAnimationArea: (area) => {
+        this.config.characterManager.registerCustomAnimationAreaWithAnimation(area);
+      },
+      updateAnimationArea: (area) => {
+        this.config.characterManager.registerCustomAnimationAreaWithAnimation(area);
+      },
+      removeAnimationArea: (area) => {
+        this.config.characterManager.unregisterCustomAnimationArea(area.id);
       },
       getUserPositionAndRotation: this.config.getUserPositionAndRotation,
       addInteraction: (interaction: Interaction<ThreeJSGraphicsAdapter>) => {

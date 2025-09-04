@@ -735,6 +735,7 @@ export class Networked3dWebExperienceClient {
       getUserPositionAndRotation: () => {
         return this.characterManager.getLocalCharacterPositionAndRotation();
       },
+      characterManager: this.characterManager,
     });
     this.scene.add(this.mmlCompositionScene.group);
     setGlobalMMLScene(this.mmlCompositionScene.mmlScene as IMMLScene);
