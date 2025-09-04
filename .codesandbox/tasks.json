@@ -3,13 +3,13 @@
   "setupTasks": [
     {
       "name": "Install Dependencies",
-      "command": "npm install"
+      "command": "pnpm install"
     }
   ],
   "tasks": {
     "start": {
       "name": "Start",
-      "command": "npm run iterate",
+      "command": "pnpm iterate",
       "runAtStart": true,
       "restartOn": {
         "branch": true

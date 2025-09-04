@@ -27,7 +27,7 @@ const buildOptions: esbuild.BuildOptions = {
   platform: "node",
   target: "es2022",
   plugins: mode === watchMode ? [rebuildOnDependencyChangesPlugin({
-    startCommand: "npm run iterate:start",
+    startCommand: "pnpm iterate:start",
   })] : [],
 };
 

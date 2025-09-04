@@ -42,8 +42,8 @@ This repository includes the following published packages:
 Making sure you have Node.js installed, run the following from the root of the repository:
 
 ```bash
-npm install
-npm run iterate
+pnpm install
+pnpm iterate
 ```
 
 ## Examples
