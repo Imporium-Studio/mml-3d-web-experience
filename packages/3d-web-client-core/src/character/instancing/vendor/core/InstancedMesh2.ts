@@ -294,6 +294,7 @@ export class InstancedMesh2<
     params: InstancedMesh2Params = {},
     LOD?: InstancedMesh2,
   ) {
+    console.log({ geometry, material, params, LOD });
     if (!geometry) throw new Error('"geometry" is mandatory.');
     if (!material) throw new Error('"material" is mandatory.');
 
@@ -350,6 +351,7 @@ export class InstancedMesh2<
     material: Material,
     group: any,
   ): void {
+    // return;
     this.patchMaterial(renderer, material);
 
     if (!this.instanceIndex) {

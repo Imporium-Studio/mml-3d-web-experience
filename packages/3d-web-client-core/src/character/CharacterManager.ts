@@ -8,7 +8,6 @@ import { VirtualJoystick } from "../input/VirtualJoystick";
 import { EulXYZ } from "../math/EulXYZ";
 import { Quat } from "../math/Quat";
 import { Vect3 } from "../math/Vect3";
-import { Composer } from "../rendering/composer";
 import { TimeManager } from "../time/TimeManager";
 import { TweakPane } from "../tweakpane/TweakPane";
 
@@ -59,7 +58,6 @@ export type SpawnConfigurationState = {
 };
 
 export type CharacterManagerConfig = {
-  composer: Composer;
   characterModelLoader: CharacterModelLoader;
   collisionsManager: CollisionsManager;
   cameraManager: CameraManager;
@@ -149,7 +147,6 @@ export class CharacterManager {
         console.error(`CharacterManager: Local character ${id} model failed to load:`, error);
       },
       cameraManager: this.config.cameraManager,
-      composer: this.config.composer,
       isLocal: true,
     });
     const quaternion = character.quaternion;
@@ -334,7 +331,6 @@ export class CharacterManager {
         // The instance was never shadowed since the modelLoadedCallback was never called
       },
       cameraManager: this.config.cameraManager,
-      composer: this.config.composer,
       isLocal: false,
       abortController,
     });

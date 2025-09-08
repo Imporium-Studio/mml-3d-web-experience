@@ -6,7 +6,6 @@ import { FolderApi, Pane } from "tweakpane";
 import { CameraManager } from "../camera/CameraManager";
 import { LocalController } from "../character/LocalController";
 import { EventHandlerCollection } from "../input/EventHandlerCollection";
-import type { Composer } from "../rendering/composer";
 import { BrightnessContrastSaturation } from "../rendering/post-effects/bright-contrast-sat";
 import { GaussGrainEffect } from "../rendering/post-effects/gauss-grain";
 import { PostProcessingManager } from "../rendering/PostProcessingManager";
@@ -57,7 +56,9 @@ export class TweakPane {
     private holderElement: HTMLElement,
     private renderer: WebGLRenderer,
     private scene: Scene,
-    private composer: Composer,
+    // TODO: (VORTEX) Re-add composer and postProcessingManager when we fully build out our own supplied composer as it will be handy to present on the
+    // tweak pane.
+    // private composer: Composer,
     private postProcessingEnabled: boolean | undefined,
   ) {
     this.tweakPaneWrapper = document.createElement("div");
@@ -216,6 +217,8 @@ export class TweakPane {
   }
 
   public updateStats(timeManager: TimeManager): void {
+    // VORTEX: Keeping a log of removed composer and postProcessingManager for now
+    return;
     const postProcessingManager = (this.composer as any).postProcessingManager;
     if (postProcessingManager?.effectComposer) {
       this.renderStatsFolder.update(

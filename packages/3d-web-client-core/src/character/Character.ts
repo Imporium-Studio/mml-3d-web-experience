@@ -3,8 +3,6 @@ import { AnimationClip, Color, Group, Object3D, Quaternion } from "three";
 import { CameraManager } from "../camera/CameraManager";
 import { EulXYZ } from "../math/EulXYZ";
 import { Vect3 } from "../math/Vect3";
-import { Composer } from "../rendering/composer";
-
 import { CharacterModel } from "./CharacterModel";
 import { AnimationState } from "./CharacterState";
 import { CharacterTooltip } from "./CharacterTooltip";
@@ -53,7 +51,6 @@ export type CharacterConfig = {
   modelLoadedCallback: () => void;
   modelLoadFailedCallback?: (error: Error) => void;
   cameraManager: CameraManager;
-  composer: Composer;
   isLocal: boolean;
   abortController?: AbortController;
 };

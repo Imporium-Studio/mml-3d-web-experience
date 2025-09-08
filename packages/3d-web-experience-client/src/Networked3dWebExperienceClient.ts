@@ -6,7 +6,7 @@ import {
   CharacterModelLoader,
   CharacterState,
   CollisionsManager,
-  Composer,
+  // Composer,
   EnvironmentConfiguration,
   ErrorScreen,
   EulXYZ,
@@ -127,7 +127,7 @@ export class Networked3dWebExperienceClient {
   private canvasHolder: HTMLDivElement;
 
   private scene: Scene = new Scene();
-  private composer: Composer;
+  // private composer: Composer;
   private tweakPane: TweakPane | null = null;
   private audioListener = new AudioListener();
 
@@ -204,14 +204,14 @@ export class Networked3dWebExperienceClient {
       mouseSupport: false,
     });
 
-    this.composer = new Composer({
-      scene: this.scene,
-      cameraManager: this.cameraManager,
-      spawnSun: true,
-      environmentConfiguration: this.config.environmentConfiguration,
-      postProcessingEnabled: this.config.postProcessingEnabled,
-    });
-    this.canvasHolder.appendChild(this.composer.renderer.domElement);
+    // this.composer = new Composer({
+    //   scene: this.scene,
+    //   cameraManager: this.cameraManager,
+    //   spawnSun: true,
+    //   environmentConfiguration: this.config.environmentConfiguration,
+    //   postProcessingEnabled: this.config.postProcessingEnabled,
+    // });
+    // this.canvasHolder.appendChild(this.composer.renderer.domElement);
 
     if (this.config.enableTweakPane !== false) {
       this.setupTweakPane();
@@ -324,7 +324,6 @@ export class Networked3dWebExperienceClient {
     );
 
     this.characterManager = new CharacterManager({
-      composer: this.composer,
       characterModelLoader: this.characterModelLoader,
       collisionsManager: this.collisionsManager,
       cameraManager: this.cameraManager,
