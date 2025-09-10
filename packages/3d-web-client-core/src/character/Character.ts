@@ -297,11 +297,6 @@ export class Character extends Group {
   }
 
   public updateAnimation(targetAnimation: AnimationState) {
-    // if (this.forcedAnimation !== null && targetAnimation !== this.forcedAnimation) {
-    //   // Only update to forced animation while active
-    //   this.model?.updateAnimation(this.forcedAnimation);
-    //   return;
-    // }
     this.model?.updateAnimation(targetAnimation);
   }
 

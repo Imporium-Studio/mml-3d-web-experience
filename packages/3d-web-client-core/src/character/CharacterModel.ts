@@ -411,7 +411,6 @@ export class CharacterModel {
       return;
     }
 
-    console.log("Transitioning to animation:", targetAnimation, this.animations);
     const currentAction = this.animations[this.currentAnimation];
     const targetAction = this.animations[targetAnimation];
 
