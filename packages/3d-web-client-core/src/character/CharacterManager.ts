@@ -172,8 +172,8 @@ export class CharacterManager {
     return this.animationAreaManager.upsertArea(area);
   }
 
-  public unregisterCustomAnimationArea(id: string) {
-    this.animationAreaManager.removeArea(id);
+  public unregisterCustomAnimationArea(area: AnimationArea<ThreeJSGraphicsAdapter>) {
+    this.animationAreaManager.removeArea(area);
   }
 
   public spawnLocalCharacter(

@@ -117,7 +117,7 @@ export class MMLCompositionScene {
         this.config.characterManager.registerCustomAnimationAreaWithAnimation(area);
       },
       removeAnimationArea: (area) => {
-        this.config.characterManager.unregisterCustomAnimationArea(area.id);
+        this.config.characterManager.unregisterCustomAnimationArea(area);
       },
       getUserPositionAndRotation: this.config.getUserPositionAndRotation,
       addInteraction: (interaction: Interaction<ThreeJSGraphicsAdapter>) => {

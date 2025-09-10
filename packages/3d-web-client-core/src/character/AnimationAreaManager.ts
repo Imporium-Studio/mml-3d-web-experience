@@ -17,7 +17,7 @@ type Area = {
 
 /** Lightweight manager to create / update / remove animation areas; integrates with CharacterManager */
 export class AnimationAreaManager {
-  private areas = new Map<string, Area>();
+  private areas = new Map<AnimationArea<ThreeJSGraphicsAdapter>, Area>();
 
   private availableCustomStates: AnimationState[] = [
     AnimationState.custom0,
@@ -64,11 +64,10 @@ export class AnimationAreaManager {
   public async upsertArea(
     area: AnimationArea<ThreeJSGraphicsAdapter>,
   ): Promise<AnimationState | null> {
-    console.log("Upserting area:", area);
-    const existing = this.areas.get(area.id);
+    const existing = this.areas.get(area);
     let allocated: AnimationState | undefined = existing?.allocatedState;
     if (!allocated) {
-      if (!area.props.animationSrc) {
+      if (!area.props.src) {
         return null;
       }
       const newly = this.allocateState();
@@ -81,16 +80,13 @@ export class AnimationAreaManager {
     const record: Area = {
       animationArea: area,
       allocatedState: allocated,
-      clipLoaded: existing?.clipLoaded ?? false,
-      clip: existing?.clip,
+      clipLoaded: false,
     };
-    this.areas.set(area.id, record);
+    this.areas.set(area, record);
     // Load animation clip if not already
     if (!record.clipLoaded) {
       try {
-        const clip = await this.characterModelLoader.loadAnimation(
-          record.animationArea.props.animationSrc!,
-        );
+        const clip = await this.characterModelLoader.loadAnimation(record.animationArea.props.src!);
         if (clip) {
           record.clipLoaded = true;
           record.clip = clip;
@@ -103,27 +99,23 @@ export class AnimationAreaManager {
           );
         }
       } catch (e) {
-        console.error("AnimationAreaManager: failed to load clip", area.props.animationSrc, e);
+        console.error("AnimationAreaManager: failed to load clip", area.props.src, e);
       }
     }
     return allocated;
   }
 
-  public removeArea(id: string) {
-    const existing = this.areas.get(id);
+  public removeArea(area: AnimationArea<ThreeJSGraphicsAdapter>) {
+    const existing = this.areas.get(area);
     if (existing) {
       this.used.delete(existing.allocatedState);
-      this.areas.delete(id);
-      if (this.activeAreaId === id) {
-        this.activeAreaId = null;
-      }
+      this.areas.delete(area);
     }
   }
 
   public clear() {
     this.areas.clear();
     this.used.clear();
-    this.activeAreaId = null;
   }
 
   /** Get all loaded custom animations for registering to remote characters */
@@ -152,8 +144,6 @@ export class AnimationAreaManager {
     return result;
   }
 
-  private activeAreaId: string | null = null;
-
   /** Evaluate current position; returns an override AnimationState or null */
   public evaluate(position: Vect3): AnimationState | null {
     const hits: Array<typeof this.areas extends Map<any, infer V> ? V : never> = [] as any;
@@ -163,14 +153,12 @@ export class AnimationAreaManager {
       }
     }
     if (hits.length === 0) {
-      this.activeAreaId = null;
       return null;
     }
     hits.sort(
       (a, b) => (b.animationArea.props.priority ?? 0) - (a.animationArea.props.priority ?? 0),
     );
     const top = hits[0];
-    this.activeAreaId = top.animationArea.id;
     return top.allocatedState;
   }
 }
