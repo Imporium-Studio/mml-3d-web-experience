@@ -194,7 +194,8 @@ export class LocalController {
       const targetAnimation = this.getTargetAnimation();
       this.config.character.updateAnimation(targetAnimation);
     } else {
-      this.config.character.updateAnimation(AnimationState.idle);
+      const forced = this.config.character.getForcedAnimation?.();
+      this.config.character.updateAnimation(forced ?? AnimationState.idle);
     }
 
     if (this.controlState) {
@@ -235,7 +236,8 @@ export class LocalController {
       return AnimationState.air;
     }
     if (!this.controlState) {
-      return AnimationState.idle;
+      const forced = this.config.character.getForcedAnimation?.();
+      return forced ?? AnimationState.idle;
     }
 
     if (this.controlState.isSprinting) {

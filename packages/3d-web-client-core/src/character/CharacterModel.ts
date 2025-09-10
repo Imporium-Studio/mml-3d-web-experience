@@ -386,6 +386,23 @@ export class CharacterModel {
     }
   }
 
+  /** Add or replace an externally provided animation clip for a given custom AnimationState */
+  public addExternalAnimation(
+    animationClip: AnimationClip,
+    animationState: AnimationState,
+    loop: boolean,
+    speed: number,
+  ) {
+    if (!this.animationMixer || !this.mesh) return;
+    if (this.animations[animationState]) {
+      // Replace existing action
+      const existing = this.animations[animationState];
+      existing.stop();
+      this.animationMixer.uncacheAction(existing.getClip(), this.mesh as any);
+    }
+    this.setAnimationFromFile(animationClip, animationState, loop, speed);
+  }
+
   private transitionToAnimation(
     targetAnimation: AnimationState,
     transitionDuration: number = 0.15,

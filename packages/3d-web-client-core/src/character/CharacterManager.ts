@@ -1,4 +1,5 @@
-import { PositionAndRotation, radToDeg } from "@mml-io/mml-web";
+import { AnimationArea, PositionAndRotation, radToDeg } from "@mml-io/mml-web";
+import { ThreeJSGraphicsAdapter } from "@mml-io/mml-web-threejs";
 import { Euler, Group, Quaternion } from "three";
 
 import { CameraManager } from "../camera/CameraManager";
@@ -12,6 +13,7 @@ import { Composer } from "../rendering/composer";
 import { TimeManager } from "../time/TimeManager";
 import { TweakPane } from "../tweakpane/TweakPane";
 
+import { AnimationAreaManager } from "./AnimationAreaManager";
 import { Character, CharacterDescription, LoadedAnimations } from "./Character";
 import { colorArrayToColors } from "./CharacterModel";
 import { AnimationState, CharacterState } from "./CharacterState";
@@ -100,6 +102,17 @@ type CharacterReadyForScene = {
   remoteController: RemoteController;
 };
 
+export type CustomAnimationArea = {
+  id: string;
+  center: { x: number; y: number; z: number };
+  size: { x: number; y: number; z: number };
+  animationUrl: string;
+  loop?: boolean;
+  speed?: number;
+  priority?: number;
+  animationState?: AnimationState;
+};
+
 export class CharacterManager {
   public static readonly headTargetOffset = new Vect3(0, 1.3, 0);
 
@@ -124,9 +137,43 @@ export class CharacterManager {
   // Queue for characters ready to be added to the scene (throttled)
   private charactersReadyForScene: CharacterReadyForScene[] = [];
 
+  private animationAreaManager: AnimationAreaManager;
+  private lastEvaluatedAreaState: AnimationState | null = null;
+
   constructor(private config: CharacterManagerConfig) {
     this.group = new Group();
     this.initializeCharacterInstances();
+
+    // Pass a callback to AnimationAreaManager for registering custom animations
+    this.animationAreaManager = new AnimationAreaManager(
+      this.config.characterModelLoader,
+      (animationState, clip, loop, speed) => {
+        // Register to local character if loaded
+        if (this.localCharacter) {
+          this.localCharacter.registerCustomAnimation(animationState, clip, loop, speed);
+        }
+        // Optionally, could register to remote characters here if desired
+        this.remoteCharacters.forEach((character) => {
+          character.loadedCharacterState?.character.registerCustomAnimation(
+            animationState,
+            clip,
+            loop,
+            speed,
+          );
+        });
+      },
+    );
+  }
+
+  // Backwards compatibility methods for existing callers (e.g., custom element)
+  public async registerCustomAnimationAreaWithAnimation(
+    area: AnimationArea<ThreeJSGraphicsAdapter>,
+  ): Promise<AnimationState | null> {
+    return this.animationAreaManager.upsertArea(area);
+  }
+
+  public unregisterCustomAnimationArea(area: AnimationArea<ThreeJSGraphicsAdapter>) {
+    this.animationAreaManager.removeArea(area);
   }
 
   public spawnLocalCharacter(
@@ -144,6 +191,14 @@ export class CharacterManager {
       characterId: id,
       modelLoadedCallback: () => {
         this.config.sendLocalCharacterColors(character.getColors());
+        this.animationAreaManager.getAnimations().forEach((animation) => {
+          character.registerCustomAnimation(
+            animation.state,
+            animation.clip,
+            animation.loop,
+            animation.speed,
+          );
+        });
       },
       modelLoadFailedCallback: (error: Error) => {
         console.error(`CharacterManager: Local character ${id} model failed to load:`, error);
@@ -173,6 +228,14 @@ export class CharacterManager {
       cameraManager: this.config.cameraManager,
       timeManager: this.config.timeManager,
       spawnConfiguration: this.config.spawnConfiguration,
+    });
+    this.animationAreaManager.getAnimations().forEach((animation) => {
+      this.localCharacter?.registerCustomAnimation(
+        animation.state,
+        animation.clip,
+        animation.loop,
+        animation.speed,
+      );
     });
     this.localCharacter.position.set(spawnPosition.x, spawnPosition.y, spawnPosition.z);
     const spawnQuat = new Quat().setFromEulerXYZ(spawnRotation);
@@ -288,6 +351,12 @@ export class CharacterManager {
         }
 
         loadedCharacterState.characterLoaded = true;
+
+        // Register all loaded custom animations to remote character
+        const customAnimations = this.animationAreaManager.getAnimations();
+        for (const { state, clip, loop, speed } of customAnimations) {
+          character.registerCustomAnimation(state, clip, loop, speed);
+        }
 
         // Called when the real character has finished loading
         // Mark as loaded and clear abort controller
@@ -741,6 +810,16 @@ export class CharacterManager {
     });
 
     this.evaluateLOD();
+
+    // Delegate animation area evaluation to AnimationAreaManager
+    if (this.localCharacter) {
+      const pos = this.localCharacter.getPosition();
+      const areaState = this.animationAreaManager.evaluate(pos);
+      if (areaState !== this.lastEvaluatedAreaState) {
+        this.lastEvaluatedAreaState = areaState;
+        this.localCharacter.setForcedAnimation(areaState);
+      }
+    }
 
     if (
       this.localCharacter &&

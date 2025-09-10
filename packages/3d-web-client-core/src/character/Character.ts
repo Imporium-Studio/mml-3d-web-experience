@@ -81,9 +81,12 @@ function characterDescriptionMatches(
 
 export class Character extends Group {
   private model: CharacterModel | null = null;
+  public loaded: boolean = false;
   public usernameTooltip: CharacterTooltip;
 
   public chatTooltips: CharacterTooltip[] = [];
+  /** Optional forced animation that overrides locomotion until cleared */
+  private forcedAnimation: AnimationState | null = null;
 
   constructor(private config: CharacterConfig) {
     super();
@@ -160,6 +163,7 @@ export class Character extends Group {
           }
           this.setTooltipHeights();
           onModelLoaded();
+          this.loaded = true;
         })
         .catch((error) => {
           // Check if the error is due to cancellation
@@ -176,6 +180,7 @@ export class Character extends Group {
           if (onModelLoadFailed) {
             onModelLoadFailed(error);
           }
+          this.loaded = false;
         });
     }
     if (this.config.username !== username) {
@@ -323,6 +328,19 @@ export class Character extends Group {
     return this.model?.currentAnimation || AnimationState.idle;
   }
 
+  /** Force a specific animation. Pass null to clear. */
+  public setForcedAnimation(animation: AnimationState | null) {
+    if (animation === this.forcedAnimation) return;
+    this.forcedAnimation = animation;
+    if (this.forcedAnimation !== null) {
+      this.model?.updateAnimation(this.forcedAnimation);
+    }
+  }
+
+  public getForcedAnimation(): AnimationState | null {
+    return this.forcedAnimation;
+  }
+
   addChatBubble(message: string) {
     const tooltip = new CharacterTooltip({
       maxWidth: 1000,
@@ -346,6 +364,20 @@ export class Character extends Group {
 
   public getMesh(): Object3D | null {
     return this.model?.mesh || null;
+  }
+
+  /** Register or replace a custom animation clip for an allocated custom AnimationState slot */
+  public registerCustomAnimation(
+    animationState: AnimationState,
+    clip: AnimationClip,
+    loop: boolean = true,
+    speed: number = 1.0,
+  ) {
+    this.model?.addExternalAnimation(clip, animationState, loop, speed);
+    // If this state is currently forced, refresh to ensure transition
+    if (this.forcedAnimation === animationState) {
+      this.updateAnimation(animationState);
+    }
   }
 
   dispose() {
