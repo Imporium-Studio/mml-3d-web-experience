@@ -184,9 +184,9 @@ importers:
 
   packages/3d-web-experience-client:
     dependencies:
-      '@mml-io/3d-web-client-core':
-        specifier: ^0.23.4
-        version: 0.23.4
+      '@imporium-studio/3d-web-client-core':
+        specifier: 0.1.0-beta.4
+        version: 0.1.0-beta.4
       '@mml-io/3d-web-user-networking':
         specifier: ^0.23.4
         version: 0.23.4
@@ -1000,6 +1000,9 @@ packages:
     resolution: {integrity: sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==}
     engines: {node: '>=6.9.0'}
 
+  '@imporium-studio/3d-web-client-core@0.1.0-beta.4':
+    resolution: {integrity: sha512-REi62prpDX2p4ifs3oLJcqg0fBnLi9PpUeqcUm8lZte8+CNTtp3TSrGNpr1zFwhmMzz5OZANVVKD4njqVA8isQ==, tarball: https://npm.pkg.github.com/download/@imporium-studio/3d-web-client-core/0.1.0-beta.4/f71bd4a61419e3a175e77ab9447e2c122fb4236d}
+
   '@inquirer/external-editor@1.0.1':
     resolution: {integrity: sha512-Oau4yL24d2B5IL4ma4UpbQigkVhzPDXLoqy1ggK4gnHg/stmkffJE4oOXHXF3uz0UEpywG68KcyXsyYpA1Re/Q==}
     engines: {node: '>=18'}
@@ -1120,9 +1123,6 @@ packages:
 
   '@mml-io/3d-web-avatar@0.23.4':
     resolution: {integrity: sha512-5QUf7EIrzcCGohtX1Uq0H31/3k5yk5Wxun+mzrZZp1D3pAC2+2IDNoHu1q/qznoQfmApUYHeOvVpm9+hVvlTPg==}
-
-  '@mml-io/3d-web-client-core@0.23.4':
-    resolution: {integrity: sha512-THByd4InYl8NMpBmHKtSrO+klKGyt6kgRlEpgs+5Lnv/lvIfDkVeDevxGhBBLNDH+HZ1nv0ZxZyzVGvU7zDeUQ==}
 
   '@mml-io/3d-web-user-networking@0.23.4':
     resolution: {integrity: sha512-OWRASPnC5KfUML6EqYToJPQOxQdGq/haK1se2cm2mDsc+DwodBcZCDuibv1jAEbdXgnO6+9L/sTB/KHvd1nzGg==}
@@ -5954,6 +5954,24 @@ snapshots:
 
   '@hutson/parse-repository-url@3.0.2': {}
 
+  '@imporium-studio/3d-web-client-core@0.1.0-beta.4':
+    dependencies:
+      '@gltf-transform/core': 4.2.1
+      '@gltf-transform/extensions': 4.2.1
+      '@mml-io/3d-web-avatar': 0.23.4
+      '@mml-io/mml-web': 0.20.0
+      '@mml-io/mml-web-threejs': 0.20.0(three@0.179.0)
+      '@mml-io/model-loader': 0.20.0
+      '@monogrid/gainmap-js': 3.1.0(three@0.179.0)
+      '@tweakpane/core': 2.0.5
+      '@tweakpane/plugin-essentials': 0.2.1(tweakpane@4.0.5)
+      draco3d: 1.5.7
+      meshoptimizer: 0.18.1
+      postprocessing: 6.37.6(three@0.179.0)
+      three: 0.179.0
+      three-mesh-bvh: 0.9.0(three@0.179.0)
+      tweakpane: 4.0.5
+
   '@inquirer/external-editor@1.0.1(@types/node@24.3.1)':
     dependencies:
       chardet: 2.1.0
@@ -6294,24 +6312,6 @@ snapshots:
       react: 19.1.1
       three: 0.178.0
 
-  '@mml-io/3d-web-client-core@0.23.4':
-    dependencies:
-      '@gltf-transform/core': 4.2.1
-      '@gltf-transform/extensions': 4.2.1
-      '@mml-io/3d-web-avatar': 0.23.4
-      '@mml-io/mml-web': 0.20.0
-      '@mml-io/mml-web-threejs': 0.20.0(three@0.178.0)
-      '@mml-io/model-loader': 0.20.0
-      '@monogrid/gainmap-js': 3.1.0(three@0.178.0)
-      '@tweakpane/core': 2.0.5
-      '@tweakpane/plugin-essentials': 0.2.1(tweakpane@4.0.5)
-      draco3d: 1.5.7
-      meshoptimizer: 0.18.1
-      postprocessing: 6.37.6(three@0.178.0)
-      three: 0.178.0
-      three-mesh-bvh: 0.9.0(three@0.178.0)
-      tweakpane: 4.0.5
-
   '@mml-io/3d-web-user-networking@0.23.4':
     dependencies:
       '@mml-io/delta-net-protocol': 0.23.4
@@ -6330,12 +6330,6 @@ snapshots:
   '@mml-io/delta-net-web@0.23.4':
     dependencies:
       '@mml-io/delta-net-protocol': 0.23.4
-
-  '@mml-io/mml-web-threejs@0.20.0(three@0.178.0)':
-    dependencies:
-      '@mml-io/mml-web': 0.20.0
-      '@mml-io/model-loader': 0.20.0
-      three: 0.178.0
 
   '@mml-io/mml-web-threejs@0.20.0(three@0.179.0)':
     dependencies:
@@ -6386,11 +6380,6 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
-
-  '@monogrid/gainmap-js@3.1.0(three@0.178.0)':
-    dependencies:
-      promise-worker-transferable: 1.0.4
-      three: 0.178.0
 
   '@monogrid/gainmap-js@3.1.0(three@0.179.0)':
     dependencies:
@@ -10591,10 +10580,6 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postprocessing@6.37.6(three@0.178.0):
-    dependencies:
-      three: 0.178.0
-
   postprocessing@6.37.6(three@0.179.0):
     dependencies:
       three: 0.179.0
@@ -11251,10 +11236,6 @@ snapshots:
   text-extensions@1.9.0: {}
 
   text-table@0.2.0: {}
-
-  three-mesh-bvh@0.9.0(three@0.178.0):
-    dependencies:
-      three: 0.178.0
 
   three-mesh-bvh@0.9.0(three@0.179.0):
     dependencies:
