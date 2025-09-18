@@ -196,8 +196,8 @@ importers:
         specifier: ^19.0.0
         version: 19.1.1
       three:
-        specifier: 0.178.0
-        version: 0.178.0
+        specifier: 0.179.0
+        version: 0.179.0
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
@@ -206,8 +206,8 @@ importers:
         specifier: ^22.13.1
         version: 22.18.0
       '@types/three':
-        specifier: 0.178.0
-        version: 0.178.0
+        specifier: 0.179.0
+        version: 0.179.0
       esbuild-css-modules-plugin:
         specifier: 3.1.4
         version: 3.1.4(esbuild@0.24.2)
@@ -236,14 +236,14 @@ importers:
         specifier: link:../../../mml/packages/mml-web
         version: link:../../../mml/packages/mml-web
       '@mml-io/mml-web-threejs':
-        specifier: 0.20.0
-        version: 0.20.0(three@0.178.0)
+        specifier: link:../../../mml/packages/mml-web-threejs
+        version: link:../../../mml/packages/mml-web-threejs
       '@mml-io/model-loader':
-        specifier: 0.20.0
-        version: 0.20.0
+        specifier: link:../../../mml/packages/model-loader
+        version: link:../../../mml/packages/model-loader
       '@monogrid/gainmap-js':
         specifier: ^3.1.0
-        version: 3.1.0(three@0.178.0)
+        version: 3.1.0(three@0.179.0)
       '@tweakpane/core':
         specifier: 2.0.5
         version: 2.0.5
@@ -258,13 +258,13 @@ importers:
         version: 0.18.1
       postprocessing:
         specifier: 6.37.6
-        version: 6.37.6(three@0.178.0)
+        version: 6.37.6(three@0.179.0)
       three:
-        specifier: 0.178.0
-        version: 0.178.0
+        specifier: 0.179.0
+        version: 0.179.0
       three-mesh-bvh:
         specifier: 0.9.0
-        version: 0.9.0(three@0.178.0)
+        version: 0.9.0(three@0.179.0)
       tweakpane:
         specifier: 4.0.5
         version: 4.0.5
@@ -276,8 +276,8 @@ importers:
         specifier: ^22.13.1
         version: 22.18.1
       '@types/three':
-        specifier: 0.178.0
-        version: 0.178.0
+        specifier: 0.179.0
+        version: 0.179.0
 
   packages/3d-web-experience-client:
     dependencies:
@@ -297,8 +297,8 @@ importers:
         specifier: ^19.0.0
         version: 19.1.1(react@19.1.1)
       three:
-        specifier: 0.180.0
-        version: 0.180.0
+        specifier: 0.179.0
+        version: 0.179.0
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
@@ -1688,6 +1688,9 @@ packages:
 
   '@types/three@0.178.0':
     resolution: {integrity: sha512-1IpVbMKbEAAWjyn0VTdVcNvI1h1NlTv3CcnwMr3NNBv/gi3PL0/EsWROnXUEkXBxl94MH5bZvS8h0WnBRmR/pQ==}
+
+  '@types/three@0.179.0':
+    resolution: {integrity: sha512-VgbFG2Pgsm84BqdegZzr7w2aKbQxmgzIu4Dy7/75ygiD/0P68LKmp5ie08KMPNqGTQwIge8s6D1guZf1RnZE0A==}
 
   '@types/tmp@0.2.6':
     resolution: {integrity: sha512-chhaNf2oKHlRkDGt+tiKE2Z5aJ6qalm7Z9rlLdBwmOiAAf09YQvvoLXjWK4HWPF1xU/fqvMgfNfpVoBscA/tKA==}
@@ -3982,6 +3985,9 @@ packages:
   meshoptimizer@0.18.1:
     resolution: {integrity: sha512-ZhoIoL7TNV4s5B6+rx5mC//fw8/POGyNxS/DZyCJeiZ12ScLfVwRE/GfsxwiTkMYYD5DmK2/JXnEVXqL4rF+Sw==}
 
+  meshoptimizer@0.22.0:
+    resolution: {integrity: sha512-IebiK79sqIy+E4EgOr+CAw+Ke8hAspXKzBd0JdgEmPHiAwmvEj2S4h1rfvo+o/BnfEYd/jAOg5IeeIjzlzSnDg==}
+
   methods@1.1.2:
     resolution: {integrity: sha512-iclAHeNqNm68zFtnZ0e+1L2yUIdvzNoauKU4WBA3VvH/vPFieF7qfRlwUZU+DA9P9bPXIS90ulxoUoCH23sV2w==}
     engines: {node: '>= 0.6'}
@@ -5101,8 +5107,8 @@ packages:
   three@0.178.0:
     resolution: {integrity: sha512-ybFIB0+x8mz0wnZgSGy2MO/WCO6xZhQSZnmfytSPyNpM0sBafGRVhdaj+erYh5U+RhQOAg/eXqw5uVDiM2BjhQ==}
 
-  three@0.180.0:
-    resolution: {integrity: sha512-o+qycAMZrh+TsE01GqWUxUIKR1AL0S8pq7zDkYOQw8GqfX8b8VoCKYUoHbhiX5j+7hr8XsuHDVU6+gkQJQKg9w==}
+  three@0.179.0:
+    resolution: {integrity: sha512-V04E7nW9QS+ZDugmpu50x7cLT69th15elaXJPDo79CZs3q/0V8zHf1d3vrm9q2vQ/jef1fXdg8FvaMq2gJvzkw==}
 
   through2@2.0.5:
     resolution: {integrity: sha512-/mrRod8xqpA+IHSLyGCQ2s8SPHiCDEeQJSep1jqLYeEUClOFG2Qsh+4FU6G9VeqpZnGW/Su8LQGc4YKni5rYSQ==}
@@ -6536,6 +6542,11 @@ snapshots:
       promise-worker-transferable: 1.0.4
       three: 0.178.0
 
+  '@monogrid/gainmap-js@3.1.0(three@0.179.0)':
+    dependencies:
+      promise-worker-transferable: 1.0.4
+      three: 0.179.0
+
   '@napi-rs/wasm-runtime@0.2.4':
     dependencies:
       '@emnapi/core': 1.5.0
@@ -7041,6 +7052,16 @@ snapshots:
       '@webgpu/types': 0.1.64
       fflate: 0.8.2
       meshoptimizer: 0.18.1
+
+  '@types/three@0.179.0':
+    dependencies:
+      '@dimforge/rapier3d-compat': 0.12.0
+      '@tweenjs/tween.js': 23.1.3
+      '@types/stats.js': 0.17.4
+      '@types/webxr': 0.5.23
+      '@webgpu/types': 0.1.64
+      fflate: 0.8.2
+      meshoptimizer: 0.22.0
 
   '@types/tmp@0.2.6': {}
 
@@ -10145,6 +10166,8 @@ snapshots:
 
   meshoptimizer@0.18.1: {}
 
+  meshoptimizer@0.22.0: {}
+
   methods@1.1.2: {}
 
   micromatch@4.0.8:
@@ -10731,6 +10754,10 @@ snapshots:
   postprocessing@6.37.6(three@0.178.0):
     dependencies:
       three: 0.178.0
+
+  postprocessing@6.37.6(three@0.179.0):
+    dependencies:
+      three: 0.179.0
 
   prebuild-install@7.1.3:
     dependencies:
@@ -11389,9 +11416,13 @@ snapshots:
     dependencies:
       three: 0.178.0
 
+  three-mesh-bvh@0.9.0(three@0.179.0):
+    dependencies:
+      three: 0.179.0
+
   three@0.178.0: {}
 
-  three@0.180.0: {}
+  three@0.179.0: {}
 
   through2@2.0.5:
     dependencies:

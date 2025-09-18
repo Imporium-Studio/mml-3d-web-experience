@@ -4,20 +4,33 @@
     "module": "es2022",
     "target": "es2022",
     "jsx": "react",
-    "lib": ["es2022", "dom"],
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "esModuleInterop": true,
     "sourceMap": true,
     "allowJs": true,
-    "types": ["node", "jest"],
+    "types": [
+      "node",
+      "jest"
+    ],
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "downlevelIteration": true,
     "outDir": "./build",
     "incremental": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "test/**/*", "./build.ts"],
-  "exclude": ["**/build/*", "types-src"]
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "./build.ts"
+  ],
+  "exclude": [
+    "**/build/*",
+    "types-src"
+  ]
 }

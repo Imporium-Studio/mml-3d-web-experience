@@ -25,6 +25,8 @@ import {
   WebGLRenderer,
 } from "three";
 
+import { WebGPURenderer } from "three/webgpu";
+
 import { ColorPartName } from "../../../CharacterModel";
 
 import { CustomSortCallback, OnFrustumEnterCallback } from "./feature/FrustumCulling";
@@ -32,7 +34,7 @@ import { Entity } from "./feature/Instances";
 import { LODInfo } from "./feature/LOD";
 import { InstancedEntity } from "./InstancedEntity";
 import { BVHParams, InstancedMeshBVH } from "./InstancedMeshBVH";
-import { GLInstancedBufferAttribute } from "./utils/GLInstancedBufferAttribute";
+
 import { SquareDataTexture } from "./utils/SquareDataTexture";
 
 // TODO: Add check to not update partial texture if needsuupdate already true
@@ -68,7 +70,7 @@ export interface InstancedMesh2Params {
    * If not provided, buffers will be initialized during the first render, resulting in no instances being rendered initially.
    * @default null
    */
-  renderer?: WebGLRenderer;
+  renderer?: WebGLRenderer | WebGPURenderer;
 }
 
 /**
@@ -105,7 +107,7 @@ export class InstancedMesh2<
   /**
    * Attribute storing indices of the instances to be rendered.
    */
-  public instanceIndex: GLInstancedBufferAttribute | null = null;
+  public instanceIndex: InstancedBufferAttribute | null = null;
   /**
    * Texture storing matrices for instances.
    */
@@ -195,7 +197,7 @@ export class InstancedMesh2<
    * Callback function called if an instance is inside the frustum.
    */
   public onFrustumEnter: OnFrustumEnterCallback | null = null;
-  /** @internal */ _renderer: WebGLRenderer | null = null;
+  /** @internal */ _renderer: WebGLRenderer | WebGPURenderer | null = null;
   /** @internal */ _instancesCount = 0;
   /** @internal */ _instancesArrayCount = 0;
   /** @internal */ _perObjectFrustumCulled = true;
@@ -210,7 +212,7 @@ export class InstancedMesh2<
   protected _currentMaterial: Material | null = null;
   protected _customProgramCacheKeyBase: (() => string) | null = null;
   protected _onBeforeCompileBase:
-    | ((parameters: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer) => void)
+    | ((parameters: WebGLProgramParametersWithUniforms, renderer: WebGLRenderer | WebGPURenderer) => void)
     | null = null;
   protected _propertiesGetBase: ((obj: unknown) => unknown) | null = null;
   protected _propertiesGetMap = new WeakMap<Material, (obj: unknown) => unknown>();
@@ -319,7 +321,7 @@ export class InstancedMesh2<
   }
 
   public override onBeforeShadow(
-    renderer: WebGLRenderer,
+    renderer: WebGLRenderer | WebGPURenderer,
     scene: Scene,
     camera: Camera,
     shadowCamera: Camera,
@@ -344,7 +346,7 @@ export class InstancedMesh2<
   }
 
   public override onBeforeRender(
-    renderer: WebGLRenderer,
+    renderer: WebGLRenderer | WebGPURenderer,
     scene: Scene,
     camera: Camera,
     geometry: BufferGeometry,
@@ -374,7 +376,7 @@ export class InstancedMesh2<
   }
 
   public override onAfterShadow(
-    renderer: WebGLRenderer,
+    renderer: WebGLRenderer | WebGPURenderer,
     scene: Scene,
     camera: Camera,
     shadowCamera: Camera,
@@ -386,7 +388,7 @@ export class InstancedMesh2<
   }
 
   public override onAfterRender(
-    renderer: WebGLRenderer,
+    renderer: WebGLRenderer | WebGPURenderer,
     scene: Scene,
     camera: Camera,
     geometry: BufferGeometry,
@@ -425,7 +427,6 @@ export class InstancedMesh2<
       return;
     }
 
-    const gl = this._renderer.getContext() as WebGL2RenderingContext;
     const capacity = this._capacity;
     const array = new Uint32Array(capacity);
 
@@ -433,7 +434,7 @@ export class InstancedMesh2<
       array[i] = i;
     }
 
-    this.instanceIndex = new GLInstancedBufferAttribute(gl, gl.UNSIGNED_INT, 1, 4, array);
+    this.instanceIndex = new InstancedBufferAttribute(array, 1);
     this._geometry.setAttribute("instanceIndex", this.instanceIndex as unknown as BufferAttribute);
   }
 
@@ -477,7 +478,7 @@ export class InstancedMesh2<
   protected patchGeometry(geometry: TGeometry): void {
     const instanceIndex = geometry.getAttribute(
       "instanceIndex",
-    ) as unknown as GLInstancedBufferAttribute; // TODO fix d.ts
+    ) as unknown as InstancedBufferAttribute; // TODO fix d.ts
 
     if (instanceIndex) {
       if (instanceIndex === this.instanceIndex) return;
@@ -501,7 +502,7 @@ export class InstancedMesh2<
 
   protected _onBeforeCompile = (
     shader: WebGLProgramParametersWithUniforms,
-    renderer: WebGLRenderer,
+    renderer: WebGLRenderer | WebGPURenderer,
   ): void => {
     if (this._onBeforeCompileBase)
       this._onBeforeCompileBase.call(this._currentMaterial, shader, renderer);
@@ -569,14 +570,21 @@ export class InstancedMesh2<
     }
   };
 
-  protected patchMaterial(renderer: WebGLRenderer, material: Material): void {
+  protected patchMaterial(renderer: WebGLRenderer | WebGPURenderer, material: Material): void {
     this._currentMaterial = material;
     this._customProgramCacheKeyBase = material.customProgramCacheKey; // avoid .bind(material); to prevent memory leak
     this._onBeforeCompileBase = material.onBeforeCompile;
     material.customProgramCacheKey = this._customProgramCacheKey;
     material.onBeforeCompile = this._onBeforeCompile;
 
-    const propertiesBase = renderer.properties;
+    // Access internal WebGLRenderer.properties only if it exists (not present on WebGPURenderer typings)
+    const propertiesBase = ('properties' in renderer ? (renderer as any).properties : null) as
+      | { get: (obj: unknown) => unknown }
+      | null;
+
+    if (!propertiesBase) {
+      return; // Skip properties patching for renderers without internal properties
+    }
 
     if (!this._properties.has(material)) {
       const materialProperties = {};
@@ -592,17 +600,21 @@ export class InstancedMesh2<
 
     const mappedGet = this._propertiesGetMap.get(material);
     if (mappedGet) {
-      propertiesBase.get = mappedGet;
+      (propertiesBase as any).get = mappedGet;
     }
   }
 
-  protected unpatchMaterial(renderer: WebGLRenderer, material: Material): void {
+  protected unpatchMaterial(renderer: WebGLRenderer | WebGPURenderer, material: Material): void {
     this._currentMaterial = null;
-    if (this._propertiesGetBase) {
-      renderer.properties.get = this._propertiesGetBase;
+    if (this._propertiesGetBase && 'properties' in renderer) {
+      (renderer as any).properties.get = this._propertiesGetBase;
     }
-    material.onBeforeCompile = this._onBeforeCompileBase!;
-    material.customProgramCacheKey = this._customProgramCacheKeyBase!;
+    if (this._onBeforeCompileBase) {
+      material.onBeforeCompile = this._onBeforeCompileBase;
+    }
+    if (this._customProgramCacheKeyBase) {
+      material.customProgramCacheKey = this._customProgramCacheKeyBase;
+    }
     this._onBeforeCompileBase = null;
     this._customProgramCacheKeyBase = null;
   }

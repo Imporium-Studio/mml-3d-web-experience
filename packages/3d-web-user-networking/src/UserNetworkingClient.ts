@@ -87,6 +87,9 @@ export class UserNetworkingClient {
 			colors: null,
 		};
 		this.deltaNetState = new DeltaNetClientState();
+		console.log("Initial user state: ", this.userState);
+		console.log("Initial pending update: ", this.pendingUpdate);
+		console.log("creating new deltanet client");
 
 		// Create deltanet client
 		this.deltaNetClient = new DeltaNetClientWebsocket(
@@ -112,9 +115,12 @@ export class UserNetworkingClient {
 					);
 					this.config.onUpdate(networkUpdate);
 
+					console.log("user index: ", this.userIndex);
+
 					// Now that we have the user IDs, resolve our stable user ID from the userIndex
 					if (this.userIndex !== null) {
 						const userIds = this.deltaNetState.getStableIds();
+						console.log("user ids: ", userIds);
 						if (this.userIndex < userIds.length) {
 							const stableId = userIds[this.userIndex];
 							const userId = this.stableIdToUserId.get(stableId);
@@ -442,6 +448,7 @@ export class UserNetworkingClient {
 	}
 
 	public stop(): void {
+		console.log("Stopping UserNetworkingClient");
 		this.deltaNetClient.stop();
 		this.reset();
 	}

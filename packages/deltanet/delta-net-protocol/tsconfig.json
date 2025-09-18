@@ -11,7 +11,7 @@
       "dom"
     ],
     "module": "es2022",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "preserveConstEnums": true,
     "resolveJsonModule": true,
     "noImplicitAny": true,
@@ -24,5 +24,10 @@
       "jest"
     ],
   },
-  "include": ["src/**/*", "test/**/*", "./build.ts", "./jest.config.ts"]
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "./build.ts",
+    "./jest.config.ts"
+  ]
 }

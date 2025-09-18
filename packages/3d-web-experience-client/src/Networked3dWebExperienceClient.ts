@@ -218,7 +218,7 @@ export class Networked3dWebExperienceClient {
     }
 
     const resizeObserver = new ResizeObserver(() => {
-      this.composer.fitContainer();
+      // this.composer.fitContainer();
     });
     resizeObserver.observe(this.element);
 
@@ -313,7 +313,7 @@ export class Networked3dWebExperienceClient {
         if (document.activeElement === document.body) {
           // No input is selected - accept the key press
           this.cameraManager.toggleFlyCamera();
-          this.composer.fitContainer();
+          // this.composer.fitContainer();
         }
       });
     }
@@ -394,7 +394,7 @@ export class Networked3dWebExperienceClient {
       ...config,
     };
     if (config.environmentConfiguration) {
-      this.composer.updateEnvironmentConfiguration(config.environmentConfiguration);
+      // this.composer.updateEnvironmentConfiguration(config.environmentConfiguration);
       this.setGroundPlaneEnabled(config.environmentConfiguration.groundPlane ?? true);
     }
 
@@ -415,7 +415,7 @@ export class Networked3dWebExperienceClient {
     }
 
     if (this.config.postProcessingEnabled !== undefined) {
-      this.composer.togglePostProcessing(this.config.postProcessingEnabled);
+      // this.composer.togglePostProcessing(this.config.postProcessingEnabled);
       if (this.tweakPane) {
         this.tweakPane.dispose();
         this.tweakPane = null;
@@ -551,13 +551,15 @@ export class Networked3dWebExperienceClient {
 
     this.tweakPane = new TweakPane(
       this.element,
-      this.composer.renderer,
+      undefined,
+      // this.composer.renderer,
       this.scene,
-      this.composer,
+      // this.composer,
+      undefined,
       this.config.postProcessingEnabled,
     );
     this.cameraManager.setupTweakPane(this.tweakPane);
-    this.composer.setupTweakPane(this.tweakPane);
+    // this.composer.setupTweakPane(this.tweakPane);
   }
 
   private handleChatMessage(fromUserId: number, message: string) {
@@ -640,10 +642,10 @@ export class Networked3dWebExperienceClient {
     this.characterManager.update();
     this.cameraManager.update();
     const characterPosition = this.characterManager.localCharacter?.getPosition();
-    this.composer.sun?.updateCharacterPosition(
-      new Vector3(characterPosition?.x || 0, characterPosition?.y || 0, characterPosition?.z || 0),
-    );
-    this.composer.render(this.timeManager);
+    // this.composer.sun?.updateCharacterPosition(
+    //   new Vector3(characterPosition?.x || 0, characterPosition?.y || 0, characterPosition?.z || 0),
+    // );
+    // this.composer.render(this.timeManager);
     if (this.tweakPane?.guiVisible) {
       this.tweakPane.updateStats(this.timeManager);
       this.tweakPane.updateCameraData(this.cameraManager);
@@ -711,7 +713,7 @@ export class Networked3dWebExperienceClient {
     this.mmlFrames = {};
     this.textChatUI?.dispose();
     this.mmlCompositionScene.dispose();
-    this.composer.dispose();
+    // this.composer.dispose();
     this.tweakPane?.dispose();
     if (this.currentRequestAnimationFrame !== null) {
       cancelAnimationFrame(this.currentRequestAnimationFrame);
@@ -726,7 +728,8 @@ export class Networked3dWebExperienceClient {
     registerCustomElementsToWindow(window);
     this.mmlCompositionScene = new MMLCompositionScene({
       targetElement: this.element,
-      renderer: this.composer.renderer,
+      renderer: undefined,
+      // this.composer.renderer,
       scene: this.scene,
       camera: this.cameraManager.camera,
       audioListener: this.audioListener,

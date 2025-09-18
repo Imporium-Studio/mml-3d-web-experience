@@ -4,7 +4,10 @@
     "module": "es2022",
     "target": "es2022",
     "jsx": "react",
-    "lib": ["es2022", "dom"],
+    "lib": [
+      "es2022",
+      "dom"
+    ],
     "sourceMap": true,
     "allowJs": true,
     "types": [
@@ -13,13 +16,20 @@
     ],
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "downlevelIteration": true,
     "outDir": "./build",
     "incremental": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "test/**/*", "./build.ts"],
-  "exclude": ["**/build/*", "types-src"]
+  "include": [
+    "src/**/*",
+    "test/**/*",
+    "./build.ts"
+  ],
+  "exclude": [
+    "**/build/*",
+    "types-src"
+  ]
 }

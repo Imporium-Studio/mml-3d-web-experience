@@ -24,6 +24,8 @@ import {
   WebGLUtils,
 } from "three";
 
+import { WebGPURenderer } from "three/webgpu";
+
 /**
  * Represents the number of elements per pixel.
  */
@@ -223,7 +225,13 @@ export class SquareDataTexture extends DataTexture {
    * This method is optimized to only update the rows that have changed, improving performance.
    * @param renderer The WebGLRenderer used for rendering.
    */
-  public update(renderer: WebGLRenderer): void {
+  public update(renderer: WebGLRenderer | WebGPURenderer): void {
+    // WebGPU path: partial row updates not implemented yet; fall back to full update.
+    if (!(renderer instanceof WebGLRenderer)) {
+      this.needsUpdate = true;
+      return;
+    }
+
     const textureProperties: any = renderer.properties.get(this);
     const versionChanged = this.version > 0 && textureProperties.__version !== this.version;
     const sizeChanged = this._lastWidth !== null && this._lastWidth !== this.image.width;
