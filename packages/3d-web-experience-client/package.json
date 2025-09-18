@@ -1,6 +1,6 @@
 {
   "name": "@imporium-studio/3d-web-experience-client",
-  "version": "0.1.0-beta.2",
+  "version": "0.1.0-beta.3",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
@@ -20,7 +20,7 @@
     "lint-fix": "eslint \"./{src,test}/**/*.{js,jsx,ts,tsx}\" --fix"
   },
   "dependencies": {
-    "@imporium-studio/3d-web-client-core": "0.1.0-beta.2",
+    "@imporium-studio/3d-web-client-core": "0.1.0-beta.3",
     "@mml-io/3d-web-user-networking": "^0.23.4",
     "@mml-io/mml-web": "0.20.0",
     "react": "^19.0.0",
