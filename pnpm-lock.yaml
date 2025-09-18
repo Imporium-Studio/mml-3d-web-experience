@@ -185,8 +185,8 @@ importers:
   packages/3d-web-experience-client:
     dependencies:
       '@imporium-studio/3d-web-client-core':
-        specifier: 0.1.0-beta.4
-        version: 0.1.0-beta.4
+        specifier: 0.1.0-beta.5
+        version: 0.1.0-beta.5
       '@mml-io/3d-web-user-networking':
         specifier: ^0.23.4
         version: 0.23.4
@@ -1000,8 +1000,8 @@ packages:
     resolution: {integrity: sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==}
     engines: {node: '>=6.9.0'}
 
-  '@imporium-studio/3d-web-client-core@0.1.0-beta.4':
-    resolution: {integrity: sha512-REi62prpDX2p4ifs3oLJcqg0fBnLi9PpUeqcUm8lZte8+CNTtp3TSrGNpr1zFwhmMzz5OZANVVKD4njqVA8isQ==, tarball: https://npm.pkg.github.com/download/@imporium-studio/3d-web-client-core/0.1.0-beta.4/f71bd4a61419e3a175e77ab9447e2c122fb4236d}
+  '@imporium-studio/3d-web-client-core@0.1.0-beta.5':
+    resolution: {integrity: sha512-NH2cYMaySmS0yiYJI8qaTDoI/BT/aXhxqtWEveCvBgVj7Ep65Ee5XzmnZWRg7K9wp0ZcFjoS+i7HdFCFmbKN2A==, tarball: https://npm.pkg.github.com/download/@imporium-studio/3d-web-client-core/0.1.0-beta.5/1c90e74c4c067cd7105dd294f5a342ad42c85138}
 
   '@inquirer/external-editor@1.0.1':
     resolution: {integrity: sha512-Oau4yL24d2B5IL4ma4UpbQigkVhzPDXLoqy1ggK4gnHg/stmkffJE4oOXHXF3uz0UEpywG68KcyXsyYpA1Re/Q==}
@@ -5954,7 +5954,7 @@ snapshots:
 
   '@hutson/parse-repository-url@3.0.2': {}
 
-  '@imporium-studio/3d-web-client-core@0.1.0-beta.4':
+  '@imporium-studio/3d-web-client-core@0.1.0-beta.5':
     dependencies:
       '@gltf-transform/core': 4.2.1
       '@gltf-transform/extensions': 4.2.1
