@@ -1,6 +1,6 @@
 {
   "name": "@imporium-studio/3d-web-client-core",
-  "version": "0.1.0-beta.3",
+  "version": "0.1.0-beta.4",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   },
