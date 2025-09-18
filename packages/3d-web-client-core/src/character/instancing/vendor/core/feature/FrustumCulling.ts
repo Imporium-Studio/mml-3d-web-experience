@@ -104,7 +104,9 @@ InstancedMesh2.prototype.performFrustumCulling = function (camera: Camera, camer
     this.frustumCullingLOD(LODrenderList, camera, cameraLOD);
   else if (!this._parentLOD) this.frustumCulling(camera);
 
-  this.instanceIndex.update(this._renderer, this.count);
+  // this.instanceIndex.update(this._renderer, this.count);
+  const attr = this.instanceIndex!;
+  attr.needsUpdate = true;
 };
 
 InstancedMesh2.prototype.frustumCulling = function (camera: Camera) {
