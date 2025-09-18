@@ -1,5 +1,5 @@
 {
-  "name": "@imporium-studio/3d-web-experience-client",
+  "name": "@imporium-studio/3d-web-experience-core",
   "version": "0.1.0-beta.0",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
