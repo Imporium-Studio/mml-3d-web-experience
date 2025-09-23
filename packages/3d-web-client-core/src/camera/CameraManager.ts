@@ -18,6 +18,7 @@ export class CameraManager {
   private flyCamera: PerspectiveCamera;
   private orbitControls: OrbitControls;
   private isMainCameraActive: boolean = true;
+  private enabled: boolean = true;
 
   public initialDistance: number = camValues.initialDistance;
   public minDistance: number = camValues.minDistance;
@@ -93,6 +94,27 @@ export class CameraManager {
     this.createEventHandlers();
   }
 
+  public enable(): void {
+    this.setEnabled(true);
+  }
+  public disable(): void {
+    this.setEnabled(false);
+  }
+  public setEnabled(flag: boolean): void {
+    if (this.enabled === flag) return;
+    this.enabled = flag;
+
+    this.orbitControls.enabled = !this.isMainCameraActive && this.enabled;
+
+    if (!this.enabled) {
+      this.activePointers.clear();
+      document.body.style.cursor = "default";
+    }
+  }
+
+
+
+
   private createEventHandlers(): void {
     this.eventHandlerCollection = EventHandlerCollection.create([
       [this.targetElement, "pointerdown", this.onPointerDown.bind(this)],
@@ -119,6 +141,7 @@ export class CameraManager {
   }
 
   private onPointerDown(event: PointerEvent): void {
+    if (!this.enabled) return;
     if (event.button === 0 || event.button === 2) {
       // Left or right mouse button
 
@@ -129,6 +152,7 @@ export class CameraManager {
   }
 
   private onPointerUp(event: PointerEvent): void {
+    if (!this.enabled) return;
     const existingPointer = this.activePointers.get(event.pointerId);
     if (existingPointer) {
       this.activePointers.delete(event.pointerId);
@@ -156,6 +180,7 @@ export class CameraManager {
   }
 
   private onPointerMove(event: PointerEvent): void {
+    if (!this.enabled) return;
     if (getTweakpaneActive()) {
       return;
     }
@@ -189,6 +214,7 @@ export class CameraManager {
   }
 
   private onMouseWheel(event: WheelEvent): void {
+    if (!this.enabled) return;
     if (getTweakpaneActive()) {
       return;
     }
@@ -207,6 +233,7 @@ export class CameraManager {
   }
 
   private onContextMenu(event: PointerEvent): void {
+    if (!this.enabled) return;
     event.preventDefault();
   }
 
@@ -299,7 +326,7 @@ export class CameraManager {
   }
 
   public toggleFlyCamera(): void {
-    this.isMainCameraActive = !this.isMainCameraActive;
+    this.isMainCameraActive = !this.isMainCameraActive && this.enabled
     if (this.isMainCameraActive) {
       this.orbitControls.enabled = false;
     } else {
