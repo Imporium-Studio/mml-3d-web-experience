@@ -99,8 +99,8 @@ importers:
         specifier: ^19.0.0
         version: 19.1.1
       three:
-        specifier: 0.179.0
-        version: 0.179.0
+        specifier: 0.178.0
+        version: 0.178.0
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
@@ -140,13 +140,13 @@ importers:
         version: 0.20.0
       '@mml-io/mml-web-threejs':
         specifier: 0.20.0
-        version: 0.20.0(three@0.179.0)
+        version: 0.20.0(three@0.178.0)
       '@mml-io/model-loader':
         specifier: 0.20.0
         version: 0.20.0
       '@monogrid/gainmap-js':
         specifier: ^3.1.0
-        version: 3.1.0(three@0.179.0)
+        version: 3.1.0(three@0.178.0)
       '@tweakpane/core':
         specifier: 2.0.5
         version: 2.0.5
@@ -161,13 +161,13 @@ importers:
         version: 0.18.1
       postprocessing:
         specifier: 6.37.6
-        version: 6.37.6(three@0.179.0)
+        version: 6.37.6(three@0.178.0)
       three:
-        specifier: 0.179.0
-        version: 0.179.0
+        specifier: 0.178.0
+        version: 0.178.0
       three-mesh-bvh:
         specifier: 0.9.0
-        version: 0.9.0(three@0.179.0)
+        version: 0.9.0(three@0.178.0)
       tweakpane:
         specifier: 4.0.5
         version: 4.0.5
@@ -200,8 +200,8 @@ importers:
         specifier: ^19.0.0
         version: 19.1.1(react@19.1.1)
       three:
-        specifier: 0.179.0
-        version: 0.179.0
+        specifier: 0.178.0
+        version: 0.178.0
     devDependencies:
       '@types/jest':
         specifier: ^29.5.12
@@ -6331,6 +6331,12 @@ snapshots:
     dependencies:
       '@mml-io/delta-net-protocol': 0.23.4
 
+  '@mml-io/mml-web-threejs@0.20.0(three@0.178.0)':
+    dependencies:
+      '@mml-io/mml-web': 0.20.0
+      '@mml-io/model-loader': 0.20.0
+      three: 0.178.0
+
   '@mml-io/mml-web-threejs@0.20.0(three@0.179.0)':
     dependencies:
       '@mml-io/mml-web': 0.20.0
@@ -6380,6 +6386,11 @@ snapshots:
       - bufferutil
       - supports-color
       - utf-8-validate
+
+  '@monogrid/gainmap-js@3.1.0(three@0.178.0)':
+    dependencies:
+      promise-worker-transferable: 1.0.4
+      three: 0.178.0
 
   '@monogrid/gainmap-js@3.1.0(three@0.179.0)':
     dependencies:
@@ -10580,6 +10591,10 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  postprocessing@6.37.6(three@0.178.0):
+    dependencies:
+      three: 0.178.0
+
   postprocessing@6.37.6(three@0.179.0):
     dependencies:
       three: 0.179.0
@@ -11236,6 +11251,10 @@ snapshots:
   text-extensions@1.9.0: {}
 
   text-table@0.2.0: {}
+
+  three-mesh-bvh@0.9.0(three@0.178.0):
+    dependencies:
+      three: 0.178.0
 
   three-mesh-bvh@0.9.0(three@0.179.0):
     dependencies:

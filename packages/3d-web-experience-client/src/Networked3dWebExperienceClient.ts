@@ -377,15 +377,15 @@ export class Networked3dWebExperienceClient {
   }
 
   private setGroundPlaneEnabled(enabled: boolean) {
-    if (enabled && this.groundPlane === null) {
-      this.groundPlane = new GroundPlane();
-      this.collisionsManager.addMeshesGroup(this.groundPlane);
-      this.scene.add(this.groundPlane);
-    } else if (!enabled && this.groundPlane !== null) {
-      this.collisionsManager.removeMeshesGroup(this.groundPlane);
-      this.scene.remove(this.groundPlane);
-      this.groundPlane = null;
-    }
+    // if (enabled && this.groundPlane === null) {
+    //   this.groundPlane = new GroundPlane();
+    //   this.collisionsManager.addMeshesGroup(this.groundPlane);
+    //   this.scene.add(this.groundPlane);
+    // } else if (!enabled && this.groundPlane !== null) {
+    //   this.collisionsManager.removeMeshesGroup(this.groundPlane);
+    //   this.scene.remove(this.groundPlane);
+    //   this.groundPlane = null;
+    // }
   }
 
   public updateConfig(config: Partial<UpdatableConfig>) {
@@ -405,23 +405,23 @@ export class Networked3dWebExperienceClient {
       this.avatarSelectionUI.updateAllowCustomDisplayName(config.allowCustomDisplayName || false);
     }
 
-    if (config.enableTweakPane !== undefined) {
-      if (config.enableTweakPane === false && this.tweakPane !== null) {
-        this.tweakPane.dispose();
-        this.tweakPane = null;
-      } else if (config.enableTweakPane === true && this.tweakPane === null) {
-        this.setupTweakPane();
-      }
-    }
+    // if (config.enableTweakPane !== undefined) {
+    //   if (config.enableTweakPane === false && this.tweakPane !== null) {
+    //     this.tweakPane.dispose();
+    //     this.tweakPane = null;
+    //   } else if (config.enableTweakPane === true && this.tweakPane === null) {
+    //     this.setupTweakPane();
+    //   }
+    // }
 
-    if (this.config.postProcessingEnabled !== undefined) {
-      // this.composer.togglePostProcessing(this.config.postProcessingEnabled);
-      if (this.tweakPane) {
-        this.tweakPane.dispose();
-        this.tweakPane = null;
-        this.setupTweakPane();
-      }
-    }
+    // if (this.config.postProcessingEnabled !== undefined) {
+    //   // this.composer.togglePostProcessing(this.config.postProcessingEnabled);
+    //   if (this.tweakPane) {
+    //     this.tweakPane.dispose();
+    //     this.tweakPane = null;
+    //     this.setupTweakPane();
+    //   }
+    // }
 
     if (config.allowOrbitalCamera !== undefined) {
       if (config.allowOrbitalCamera === false) {
@@ -435,7 +435,7 @@ export class Networked3dWebExperienceClient {
           if (document.activeElement === document.body) {
             // No input is selected - accept the key press
             this.cameraManager.toggleFlyCamera();
-            this.composer.fitContainer();
+            // this.composer.fitContainer();
           }
         });
       }
@@ -545,21 +545,20 @@ export class Networked3dWebExperienceClient {
   }
 
   private setupTweakPane() {
-    if (this.tweakPane) {
-      return;
-    }
+    // if (this.tweakPane) {
+    //   return;
+    // }
 
-    this.tweakPane = new TweakPane(
-      this.element,
-      undefined,
-      // this.composer.renderer,
-      this.scene,
-      // this.composer,
-      undefined,
-      this.config.postProcessingEnabled,
-    );
-    this.cameraManager.setupTweakPane(this.tweakPane);
-    // this.composer.setupTweakPane(this.tweakPane);
+    // this.tweakPane = new TweakPane(
+    //   this.element,
+    //   undefined,
+    //   // this.composer.renderer,
+    //   this.scene,
+    //   // this.composer,
+    //   this.config.postProcessingEnabled,
+    // );
+    // this.cameraManager.setupTweakPane(this.tweakPane);
+    // // this.composer.setupTweakPane(this.tweakPane);
   }
 
   private handleChatMessage(fromUserId: number, message: string) {
