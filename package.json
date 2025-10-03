@@ -46,5 +46,10 @@
     "turbo": "2.5.0",
     "typescript": "^5.9.2",
     "ws": "8.18.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/three": "0.179.0"
+    }
   }
 }

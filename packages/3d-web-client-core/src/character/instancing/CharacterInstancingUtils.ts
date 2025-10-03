@@ -1,10 +1,27 @@
 import { BufferAttribute, BufferGeometry, Material, SkinnedMesh } from "three";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
+function logGeomAttributes(geom: BufferGeometry, label = 'geom') {
+  console.group(`ATTRS ${label}`);
+  for (const [name, attr] of Object.entries(geom.attributes)) {
+    const a = attr as BufferAttribute;
+    const ctor = (a.array as ArrayLike<any>).constructor?.name;
+    console.log(
+      name.padEnd(14),
+      'type:', ctor?.padEnd(12),
+      'itemSize:', a.itemSize,
+      'normalized:', a.normalized
+    );
+  }
+  console.groupEnd();
+}
+
 export function mergeSkinnedMeshes(skinnedMeshes: SkinnedMesh[], debug?: boolean): SkinnedMesh {
   const geometries: BufferGeometry[] = [];
   const materials: Material[] = [];
   const skeleton = skinnedMeshes[0].skeleton;
+
+  console.log("mergeSkinnedMeshes called with meshes:", skinnedMeshes);
 
   for (const skinnedMesh of skinnedMeshes) {
     const geometry = skinnedMesh.geometry.clone();
@@ -32,10 +49,31 @@ export function mergeSkinnedMeshes(skinnedMeshes: SkinnedMesh[], debug?: boolean
   }
 
   const mergedGeometry = BufferGeometryUtils.mergeGeometries(geometries, true);
+  if (!mergedGeometry) throw new Error("Failed to merge geometries");
+  logGeomAttributes(mergedGeometry, 'after-merge');
 
-  if (!mergedGeometry) {
-    throw new Error("Failed to merge geometries");
+  // 2) Ensure index is large enough (avoid 16-bit overflow if > 65k verts)
+  const posCount = mergedGeometry.attributes.position.count;
+  if (!mergedGeometry.index) {
+    // build a trivial index so BVH can operate
+    const idx = new Uint32Array(posCount);
+    for (let i = 0; i < posCount; i++) idx[i] = i;
+    mergedGeometry.setIndex(new BufferAttribute(idx, 1));
+  } else if (
+    !(mergedGeometry.getIndex()!.array instanceof Uint32Array) &&
+    posCount > 65535
+  ) {
+    // upcast to 32-bit
+    mergedGeometry.setIndex(
+      new BufferAttribute(new Uint32Array(mergedGeometry.getIndex()!.array as any), 1),
+    );
   }
+
+  // 3) Recompute normals after weld/merge (safe default)
+  mergedGeometry.computeVertexNormals();
+
+  // 4) Build BVH once (fast raycast, spatial queries)
+  (mergedGeometry as any).computeBoundsTree?.();
 
   const mergedMesh = new SkinnedMesh(mergedGeometry, materials);
   mergedMesh.skeleton = skeleton;
@@ -46,6 +84,8 @@ export function mergeSkinnedMeshes(skinnedMeshes: SkinnedMesh[], debug?: boolean
   if (debug) {
     console.log(`Merged into single mesh with ${materials.length} materials`);
   }
+
+  console.log("Merged mesh:", mergedMesh);
 
   addVertexColorsToGeometry(mergedGeometry, materials, debug);
 

@@ -15,6 +15,7 @@ import {
   Object3D,
   Box3,
   Line3,
+  BufferAttribute,
 } from "three";
 import { VertexNormalsHelper } from "three/examples/jsm/helpers/VertexNormalsHelper.js";
 import * as BufferGeometryUtils from "three/examples/jsm/utils/BufferGeometryUtils.js";
@@ -37,6 +38,22 @@ export type CollisionMeshState = {
   debugGroup?: Group;
   trackCollisions: boolean;
 };
+
+
+function logGeomAttributes(geom: BufferGeometry, label = 'geom') {
+  console.group(`ATTRS ${label}`);
+  for (const [name, attr] of Object.entries(geom.attributes)) {
+    const a = attr as BufferAttribute;
+    const ctor = (a.array as ArrayLike<any>).constructor?.name;
+    console.log(
+      name.padEnd(14),
+      'type:', ctor?.padEnd(12),
+      'itemSize:', a.itemSize,
+      'normalized:', a.normalized
+    );
+  }
+  console.groupEnd();
+}
 
 export class CollisionsManager {
   private debug: boolean = false;
@@ -165,9 +182,35 @@ export class CollisionsManager {
       }
     });
 
-    const newBufferGeometry = BufferGeometryUtils.mergeGeometries(geometries, false);
-    newBufferGeometry.computeVertexNormals();
-    const meshBVH = new MeshBVH(newBufferGeometry);
+    const mergedGeometry = BufferGeometryUtils.mergeGeometries(geometries, true);
+    if (!mergedGeometry) throw new Error("Failed to merge geometries");
+
+    logGeomAttributes(mergedGeometry, 'after-merge');
+
+    // 2) Ensure index is large enough (avoid 16-bit overflow if > 65k verts)
+    const posCount = mergedGeometry.attributes.position.count;
+    if (!mergedGeometry.index) {
+      // build a trivial index so BVH can operate
+      const idx = new Uint32Array(posCount);
+      for (let i = 0; i < posCount; i++) idx[i] = i;
+      mergedGeometry.setIndex(new BufferAttribute(idx, 1));
+    } else if (
+      !(mergedGeometry.getIndex()!.array instanceof Uint32Array) &&
+      posCount > 65535
+    ) {
+      // upcast to 32-bit
+      mergedGeometry.setIndex(
+        new BufferAttribute(new Uint32Array(mergedGeometry.getIndex()!.array as any), 1),
+      );
+    }
+
+    // 3) Recompute normals after weld/merge (safe default)
+    mergedGeometry.computeVertexNormals();
+
+    // 4) Build BVH once (fast raycast, spatial queries)
+    (mergedGeometry as any).computeBoundsTree?.();
+    mergedGeometry.computeVertexNormals();
+    const meshBVH = new MeshBVH(mergedGeometry);
 
     const meshState: CollisionMeshState = {
       source: group,
@@ -177,9 +220,9 @@ export class CollisionsManager {
     };
     if (this.debug) {
       // Have to cast to add the boundsTree property to the geometry so that the MeshBVHHelper can find it
-      (newBufferGeometry as any).boundsTree = meshBVH;
+      (mergedGeometry as any).boundsTree = meshBVH;
 
-      const wireframeMesh = new Mesh(newBufferGeometry, new MeshBasicMaterial({ wireframe: true }));
+      const wireframeMesh = new Mesh(mergedGeometry, new MeshBasicMaterial({ wireframe: true }));
 
       const normalsHelper = new VertexNormalsHelper(wireframeMesh, 0.25, 0x00ff00);
 
@@ -210,7 +253,7 @@ export class CollisionsManager {
 
   public updateMeshesGroup(group: Group): void {
     const meshState = this.collisionMeshState.get(group);
-    if (meshState) {
+    if (meshState && group) {
       group.updateWorldMatrix(true, false);
       meshState.matrix.set(group.matrixWorld.elements);
       if (meshState.debugGroup) {

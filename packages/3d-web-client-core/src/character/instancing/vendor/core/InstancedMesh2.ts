@@ -70,7 +70,7 @@ export interface InstancedMesh2Params {
    * If not provided, buffers will be initialized during the first render, resulting in no instances being rendered initially.
    * @default null
    */
-  renderer?: WebGLRenderer | WebGPURenderer;
+  renderer?: WebGPURenderer;
 }
 
 /**
@@ -434,7 +434,12 @@ export class InstancedMesh2<
       array[i] = i;
     }
 
-    this.instanceIndex = new InstancedBufferAttribute(array, 1);
+    // UInt32Array is not supported webgpu
+    const arr = new Float32Array(capacity);
+    for (let i = 0; i < capacity; i++) arr[i] = i;
+    this.instanceIndex = new InstancedBufferAttribute(arr, 1);
+
+    console.log("Initialized instanceIndex:", this.instanceIndex);
     this._geometry.setAttribute("instanceIndex", this.instanceIndex as unknown as BufferAttribute);
   }
 
@@ -489,6 +494,7 @@ export class InstancedMesh2<
     }
 
     if (this.instanceIndex) {
+      console.log("Patching geometry with instanceIndex:", this.instanceIndex);
       geometry.setAttribute("instanceIndex", this.instanceIndex as unknown as BufferAttribute); // TODO fix d.ts
     }
   }

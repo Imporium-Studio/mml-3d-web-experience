@@ -125,7 +125,7 @@ export class CharacterModel {
 
   private colors: Array<[number, number, number]> | null = null;
 
-  constructor(private config: CharacterModelConfig) {}
+  constructor(private config: CharacterModelConfig) { }
 
   public async init(): Promise<void> {
     // Check if operation was canceled before starting
@@ -217,6 +217,7 @@ export class CharacterModel {
             characterId: this.config.characterId,
             originalMaterial,
             colorOverride: originalMaterial.color,
+            isWebGPU: true,
           });
           this.materials.set(originalMaterial.name, material);
           asMesh.material = material;
@@ -299,6 +300,7 @@ export class CharacterModel {
 
     let mmlCharacterSource: string;
     let mmlCharacterUrl: string | null = null;
+    console.log("load character config", this.config, "mmldescription", this.mmlCharacterDescription);
     if (this.config.characterDescription.mmlCharacterUrl) {
       mmlCharacterUrl = this.config.characterDescription.mmlCharacterUrl;
       const res = await fetch(mmlCharacterUrl, {
@@ -313,7 +315,9 @@ export class CharacterModel {
       );
     }
 
+    console.log("MML Character Source: ", mmlCharacterSource);
     const parsedMMLDescription = parseMMLDescription(mmlCharacterSource, mmlCharacterUrl);
+    console.log("parsed MML Description: ", parsedMMLDescription);
     const mmlCharacterDescription = parsedMMLDescription[0];
     if (parsedMMLDescription[1].length > 0) {
       console.warn("Errors parsing MML Character Description: ", parsedMMLDescription[1]);

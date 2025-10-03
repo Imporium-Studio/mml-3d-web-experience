@@ -442,7 +442,8 @@ export class UserNetworkingClient {
 		// Update local state
 		this.userState.colors = colors;
 
-		// Send state update
+		// Send state update]
+		console.log("Updating colors: ", colors);
 		const states = DeltaNetComponentMapping.toColorsState(colors);
 		this.deltaNetClient.setUserComponents(new Map(), states);
 	}

@@ -27,20 +27,20 @@ export type LoadedAnimations = {
 
 export type CharacterDescription =
   | {
-      meshFileUrl: string;
-      mmlCharacterString?: null;
-      mmlCharacterUrl?: null;
-    }
+    meshFileUrl: string;
+    mmlCharacterString?: null;
+    mmlCharacterUrl?: null;
+  }
   | {
-      meshFileUrl?: null;
-      mmlCharacterString: string;
-      mmlCharacterUrl?: null;
-    }
+    meshFileUrl?: null;
+    mmlCharacterString: string;
+    mmlCharacterUrl?: null;
+  }
   | {
-      meshFileUrl?: null;
-      mmlCharacterString?: null;
-      mmlCharacterUrl: string;
-    };
+    meshFileUrl?: null;
+    mmlCharacterString?: null;
+    mmlCharacterUrl: string;
+  };
 
 export type CharacterConfig = {
   username: string;
@@ -84,11 +84,12 @@ export class Character extends Group {
 
   constructor(private config: CharacterConfig) {
     super();
+    console.log("character config", this.config);
     this.usernameTooltip = new CharacterTooltip(
       this.config.isLocal
         ? {
-            secondsToFadeOut: 10,
-          }
+          secondsToFadeOut: 10,
+        }
         : {},
     );
     this.usernameTooltip.setText(this.config.username);
@@ -244,6 +245,7 @@ export class Character extends Group {
     if (previousModel && previousModel.mesh) {
       this.remove(previousModel.mesh);
     }
+    console.log("character description", this.config.characterDescription);
     this.model = new CharacterModel({
       characterDescription: this.config.characterDescription ?? {
         meshFileUrl: lowPolyLoDModelURL,

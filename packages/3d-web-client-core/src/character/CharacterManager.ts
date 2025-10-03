@@ -134,6 +134,7 @@ export class CharacterManager {
     spawnPosition: Vect3 = new Vect3(),
     spawnRotation: EulXYZ = new EulXYZ(),
   ) {
+    console.log("Spawning local character", characterDescription);
     const character = new Character({
       username,
       characterDescription,
@@ -256,6 +257,7 @@ export class CharacterManager {
     );
     const rotation = new EulXYZ(euler.x, euler.y, euler.z);
 
+    console.log("Promoting character", id, characterInfo, position, rotation);
     const character = new Character({
       username: characterInfo.username ?? `Unknown User ${id}`,
       characterDescription: characterInfo.characterDescription,
