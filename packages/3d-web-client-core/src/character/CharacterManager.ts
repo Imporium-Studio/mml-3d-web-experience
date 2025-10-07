@@ -2,7 +2,7 @@ import { PositionAndRotation, radToDeg } from "@mml-io/mml-web";
 import { Euler, Group, Quaternion } from "three";
 
 import { CameraManager } from "../camera/CameraManager";
-import { CollisionsManager } from "../collisions/CollisionsManager";
+// import { CollisionsManager } from "../collisions/CollisionsManager";
 import { KeyInputManager } from "../input/KeyInputManager";
 import { VirtualJoystick } from "../input/VirtualJoystick";
 import { EulXYZ } from "../math/EulXYZ";
@@ -59,7 +59,7 @@ export type SpawnConfigurationState = {
 
 export type CharacterManagerConfig = {
   characterModelLoader: CharacterModelLoader;
-  collisionsManager: CollisionsManager;
+  // collisionsManager: CollisionsManager;
   cameraManager: CameraManager;
   timeManager: TimeManager;
   keyInputManager: KeyInputManager;
@@ -165,7 +165,7 @@ export class CharacterManager {
     this.localController = new LocalController({
       character: this.localCharacter,
       id: this.localClientId,
-      collisionsManager: this.config.collisionsManager,
+      // collisionsManager: this.config.collisionsManager,
       keyInputManager: this.config.keyInputManager,
       virtualJoystick: this.config.virtualJoystick,
       cameraManager: this.config.cameraManager,
@@ -257,7 +257,6 @@ export class CharacterManager {
     );
     const rotation = new EulXYZ(euler.x, euler.y, euler.z);
 
-    console.log("Promoting character", id, characterInfo, position, rotation);
     const character = new Character({
       username: characterInfo.username ?? `Unknown User ${id}`,
       characterDescription: characterInfo.characterDescription,

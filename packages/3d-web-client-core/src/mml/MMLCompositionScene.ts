@@ -27,7 +27,7 @@ import {
 	type WebGLRenderer,
 } from "three";
 
-import type { CollisionsManager } from "../collisions/CollisionsManager";
+// import type { CollisionsManager } from "../collisions/CollisionsManager";
 
 type MMLCompositionSceneConfig = {
 	targetElement: HTMLElement;
@@ -35,7 +35,7 @@ type MMLCompositionSceneConfig = {
 	scene: Scene;
 	camera: PerspectiveCamera;
 	audioListener: AudioListener;
-	collisionsManager: CollisionsManager;
+	// collisionsManager: CollisionsManager;
 	getUserPositionAndRotation: () => PositionAndRotation;
 };
 
@@ -74,7 +74,7 @@ export class MMLCompositionScene {
 					this.config.scene,
 				);
 			},
-			dispose(): void {},
+			dispose(): void { },
 			getAudioListener: () => {
 				return this.config.audioListener;
 			},
@@ -111,13 +111,16 @@ export class MMLCompositionScene {
 				object: Object3D,
 				mElement: MElement<ThreeJSGraphicsAdapter>,
 			) => {
-				this.config.collisionsManager.addMeshesGroup(object as Group, mElement);
+				console.warn("CollisionsManager is not enabled");
+				// this.config.collisionsManager.addMeshesGroup(object as Group, mElement);
 			},
 			updateCollider: (object: Object3D) => {
-				this.config.collisionsManager.updateMeshesGroup(object as Group);
+				console.warn("CollisionsManager is not enabled");
+				// this.config.collisionsManager.updateMeshesGroup(object as Group);
 			},
 			removeCollider: (object: Object3D) => {
-				this.config.collisionsManager.removeMeshesGroup(object as Group);
+				console.warn("CollisionsManager is not enabled");
+				// this.config.collisionsManager.removeMeshesGroup(object as Group);
 			},
 			getUserPositionAndRotation: this.config.getUserPositionAndRotation,
 			addInteraction: (interaction: Interaction<ThreeJSGraphicsAdapter>) => {

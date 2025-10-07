@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import { CollisionsManager } from "../collisions/CollisionsManager";
+// import { CollisionsManager } from "../collisions/CollisionsManager";
 import { remap } from "../helpers/math-helpers";
 import { EventHandlerCollection } from "../input/EventHandlerCollection";
 import { Matr4, Ray, Vect3 } from "../math";
@@ -64,7 +64,7 @@ export class CameraManager {
 
   constructor(
     private targetElement: HTMLElement,
-    private collisionsManager: CollisionsManager,
+    // private collisionsManager: CollisionsManager,
     initialPhi = Math.PI / 2,
     initialTheta = -Math.PI / 2,
   ) {
@@ -283,14 +283,14 @@ export class CameraManager {
     const rayDirection = rayOrigin.sub(this.target.clone()).normalize();
 
     this.cameraRay.set(this.target.clone(), rayDirection);
-    const firstRaycastHit = this.collisionsManager.raycastFirst(this.cameraRay);
-    if (firstRaycastHit !== null && firstRaycastHit[0] <= this.desiredDistance) {
-      const distanceToCollision = firstRaycastHit[0] - 0.1;
-      this.targetDistance = distanceToCollision;
-      this.distance = distanceToCollision;
-    } else {
-      this.targetDistance = this.desiredDistance;
-    }
+    // const firstRaycastHit = this.collisionsManager.raycastFirst(this.cameraRay);
+    // if (firstRaycastHit !== null && firstRaycastHit[0] <= this.desiredDistance) {
+    //   const distanceToCollision = firstRaycastHit[0] - 0.1;
+    //   this.targetDistance = distanceToCollision;
+    //   this.distance = distanceToCollision;
+    // } else {
+    this.targetDistance = this.desiredDistance;
+    // }
   }
 
   public dispose() {

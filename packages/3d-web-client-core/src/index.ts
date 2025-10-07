@@ -21,7 +21,7 @@ export { VirtualJoystick } from "./input/VirtualJoystick";
 export { MMLCompositionScene } from "./mml/MMLCompositionScene";
 export { TweakPane } from "./tweakpane/TweakPane";
 export { TimeManager } from "./time/TimeManager";
-export { CollisionsManager } from "./collisions/CollisionsManager";
+// export { CollisionsManager } from "./collisions/CollisionsManager";
 export { Sun } from "./sun/Sun";
 export { GroundPlane } from "./ground-plane/GroundPlane";
 export { LoadingScreenConfig, LoadingScreen } from "./loading-screen/LoadingScreen";

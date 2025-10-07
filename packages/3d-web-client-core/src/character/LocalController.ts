@@ -1,5 +1,5 @@
 import { CameraManager } from "../camera/CameraManager";
-import { CollisionMeshState, CollisionsManager } from "../collisions/CollisionsManager";
+// import { CollisionMeshState, CollisionsManager } from "../collisions/CollisionsManager";
 import { KeyInputManager } from "../input/KeyInputManager";
 import { VirtualJoystick } from "../input/VirtualJoystick";
 import { EulXYZ } from "../math/EulXYZ";
@@ -21,7 +21,7 @@ const downVector = new Vect3(0, -1, 0);
 export type LocalControllerConfig = {
   id: number;
   character: Character;
-  collisionsManager: CollisionsManager;
+  // collisionsManager: CollisionsManager;
   keyInputManager: KeyInputManager;
   virtualJoystick?: VirtualJoystick;
   cameraManager: CameraManager;
@@ -89,11 +89,11 @@ export class LocalController {
   private surfaceTempRay = new Ray();
   private lastFrameSurfaceState:
     | [
-        CollisionMeshState,
-        {
-          lastMatrix: Matr4;
-        },
-      ]
+      CollisionMeshState,
+      {
+        lastMatrix: Matr4;
+      },
+    ]
     | null = null;
 
   public jumpReleased: boolean = true; // Indicates if the jump button has been released
@@ -182,13 +182,13 @@ export class LocalController {
       this.config.character.position.z,
     );
     this.tempRay.set(position, this.vectorDown);
-    const firstRaycastHit = this.config.collisionsManager.raycastFirst(this.tempRay);
-    if (firstRaycastHit !== null) {
-      this.currentHeight = firstRaycastHit[0];
-      this.currentSurfaceAngle.copy(firstRaycastHit[1]);
-    } else {
-      this.currentHeight = Number.POSITIVE_INFINITY;
-    }
+    // const firstRaycastHit = this.config.collisionsManager.raycastFirst(this.tempRay);
+    // if (firstRaycastHit !== null) {
+    //   this.currentHeight = firstRaycastHit[0];
+    //   this.currentSurfaceAngle.copy(firstRaycastHit[1]);
+    // } else {
+    this.currentHeight = Number.POSITIVE_INFINITY;
+    // }
 
     if (this.controlState?.direction !== null || !this.characterOnGround) {
       const targetAnimation = this.getTargetAnimation();
@@ -411,7 +411,7 @@ export class LocalController {
     avatarSegment.end.add(this.config.character.position);
 
     const positionBeforeCollisions = this.tempVector.copy(avatarSegment.start);
-    this.config.collisionsManager.applyColliders(avatarSegment, this.capsuleInfo.radius!);
+    // this.config.collisionsManager.applyColliders(avatarSegment, this.capsuleInfo.radius!);
 
     // Raycast from the top of the capsule to the bottom of the capsule to see if there is a surface intersecting the capsule
     const capsuleLength =
@@ -427,17 +427,17 @@ export class LocalController {
     // Move the ray origin to the bottom of the capsule and then add the total length to move the ray origin to the top point of the capsule
     this.tempRay.origin.y += -this.capsuleInfo.radius + capsuleLength - endIgnoreLength;
     // Find the first mesh that intersects the ray
-    const withinCapsuleRayHit = this.config.collisionsManager.raycastFirst(
-      this.tempRay,
-      capsuleLength - endIgnoreLength * 2,
-    );
-    if (withinCapsuleRayHit !== null) {
-      // There is a mesh ray collision within the capsule. Move the character up to the point of the collision
-      const rayHitPosition = withinCapsuleRayHit[3];
-      avatarSegment.start.copy(rayHitPosition);
-      // Account for the radius of the capsule
-      avatarSegment.start.y += this.capsuleInfo.radius;
-    }
+    // const withinCapsuleRayHit = this.config.collisionsManager.raycastFirst(
+    //   this.tempRay,
+    //   capsuleLength - endIgnoreLength * 2,
+    // );
+    // if (withinCapsuleRayHit !== null) {
+    //   // There is a mesh ray collision within the capsule. Move the character up to the point of the collision
+    //   const rayHitPosition = withinCapsuleRayHit[3];
+    //   avatarSegment.start.copy(rayHitPosition);
+    //   // Account for the radius of the capsule
+    //   avatarSegment.start.y += this.capsuleInfo.radius;
+    // }
 
     this.config.character.position.set(
       avatarSegment.start.x,
@@ -539,23 +539,23 @@ export class LocalController {
 
     // Raycast down from the new position to see if there is a surface below the user which will be tracked in the next frame
     const ray = this.surfaceTempRay.set(newPosition, downVector);
-    const hit = this.config.collisionsManager.raycastFirst(ray);
-    if (hit && hit[0] < 0.8) {
-      // There is a surface below the user
-      const currentCollisionMeshState = hit[2];
-      this.lastFrameSurfaceState = [
-        currentCollisionMeshState,
-        { lastMatrix: currentCollisionMeshState.matrix.clone() },
-      ];
-    } else {
-      if (this.lastFrameSurfaceState !== null && lastMovement) {
-        // Apply the last movement to the user's velocity
-        this.characterVelocity.add(
-          lastMovement.position.clone().multiplyScalar(1 / deltaTime), // The position delta is the result of one tick which is deltaTime seconds, so we need to divide by deltaTime to get the velocity per second
-        );
-      }
-      this.lastFrameSurfaceState = null;
+    // const hit = this.config.collisionsManager.raycastFirst(ray);
+    // if (hit && hit[0] < 0.8) {
+    //   // There is a surface below the user
+    //   const currentCollisionMeshState = hit[2];
+    //   this.lastFrameSurfaceState = [
+    //     currentCollisionMeshState,
+    //     { lastMatrix: currentCollisionMeshState.matrix.clone() },
+    //   ];
+    // } else {
+    if (this.lastFrameSurfaceState !== null && lastMovement) {
+      // Apply the last movement to the user's velocity
+      this.characterVelocity.add(
+        lastMovement.position.clone().multiplyScalar(1 / deltaTime), // The position delta is the result of one tick which is deltaTime seconds, so we need to divide by deltaTime to get the velocity per second
+      );
     }
+    this.lastFrameSurfaceState = null;
+    // }
     return lastMovement;
   }
 

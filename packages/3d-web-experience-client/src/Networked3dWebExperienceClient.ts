@@ -193,8 +193,8 @@ export class Networked3dWebExperienceClient {
     this.canvasHolder.style.height = "100%";
     this.element.appendChild(this.canvasHolder);
 
-    this.collisionsManager = new CollisionsManager(this.scene);
-    this.cameraManager = new CameraManager(this.canvasHolder, this.collisionsManager);
+    // this.collisionsManager = new CollisionsManager(this.scene);
+    this.cameraManager = new CameraManager(this.canvasHolder, /*this.collisionsManager*/);
     this.cameraManager.camera.add(this.audioListener);
     this.characterModelLoader = new CharacterModelLoader();
 
@@ -325,7 +325,7 @@ export class Networked3dWebExperienceClient {
 
     this.characterManager = new CharacterManager({
       characterModelLoader: this.characterModelLoader,
-      collisionsManager: this.collisionsManager,
+      // collisionsManager: this.collisionsManager,
       cameraManager: this.cameraManager,
       timeManager: this.timeManager,
       keyInputManager: this.keyInputManager,
@@ -732,7 +732,7 @@ export class Networked3dWebExperienceClient {
       scene: this.scene,
       camera: this.cameraManager.camera,
       audioListener: this.audioListener,
-      collisionsManager: this.collisionsManager,
+      // collisionsManager: this.collisionsManager,
       getUserPositionAndRotation: () => {
         return this.characterManager.getLocalCharacterPositionAndRotation();
       },
